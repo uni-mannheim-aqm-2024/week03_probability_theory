@@ -250,7 +250,7 @@ Remember: Standard Errors are about sampling uncertainty. If we repeatedly draw 
 Let's treat the data above as our population and draw six samples from it. For each sample, we fit the regression and plot the regression line for each draw:
 
 ```{r}
-set.seed(030322)
+set.seed(1234)
 s1 <- pop[sample(n, 50),]
 s2 <- pop[sample(n, 50),]
 s3 <- pop[sample(n, 50),]
@@ -301,7 +301,7 @@ Sampling uncertainty as captured by standard errors refers to the fact that for 
 Let's do this many more times:
 
 ```{r}
-set.seed(030322)
+set.seed(1234)
 n_samples <- 1000
 coefs <- data.frame(b0 = rep(NA, n_samples),
                     b1 = NA,
@@ -456,7 +456,7 @@ And which one is correct? We again draw samples from the data. This time, for ea
 # repeat the exercise from above, but this time compute
 # heteroskedasticity robust standard errors
 
-set.seed(030322)
+set.seed(1234)
 n_samples <- 1000
 coefs <- data.frame(b0 = rep(NA, n_samples),
                     b1 = NA,
@@ -643,7 +643,53 @@ Your task is to extend the above code to get the pdf and the cdf of the Beta dis
 -   Do you get a general idea what the parameters do?
 
 ```{r Exercise: Exploring the Beta distribution}
-
+x <- seq(0, 1, by = 0.01)
+alpha <- c(0.5, 5, 1, 2, 2)
+beta <- c(0.5, 1, 3, 2, 5)
+col_vec <- viridis(5)
+par(mfrow = c(1, 2))
+# Plot the pdf
+plot(
+  x,
+  dbeta(x, alpha[1], beta[1]),
+  type = "l",
+  ylab = "PDF",
+  ylim = c(0, 3),
+  las = 1,
+  bty = "n",
+  col = col_vec[1]
+)
+for (i in 2:5) {
+  lines(x, dbeta(x, alpha[i], beta[i]), col = col_vec[i])
+}
+# Plot the cdf
+plot(
+  x,
+  pbeta(x, alpha[1], beta[1]),
+  type = "l",
+  ylab = "CDF",
+  las = 1,
+  bty = "n",
+  col = col_vec[1]
+)
+for (i in 2:5) {
+  lines(x, pbeta(x, alpha[i], beta[i]), col = col_vec[i])
+}
+# Generate the string for the legend
+leg <- rep(NA, 5)
+for (i in 1:5) {
+  leg[i] <-
+    as.expression(bquote(alpha == .(paste0(alpha[i])) ~ "and" ~
+    beta == .(paste(beta[i]))))
+}
+legend(
+  "topleft",
+  leg,
+  pch = 15,
+  col = col_vec,
+  cex = 0.65,
+  bty = "n"
+)
 
 ```
 
